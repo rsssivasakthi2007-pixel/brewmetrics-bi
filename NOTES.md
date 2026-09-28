@@ -19,3 +19,23 @@ VAR PreviousMonthSales =
     )
 RETURN
     DIVIDE(CurrentSales - PreviousMonthSales, PreviousMonthSales)
+## Measure 2: Running Total Sales
+
+### Copilot suggestion
+Copilot suggested a running total measure using the existing Total Sales measure, the Dim_Date date table, MAX to identify the current date, and ALLSELECTED to accumulate sales within the selected date range.
+
+### My correction
+I reviewed the generated DAX and verified that it correctly accumulates sales from the beginning of the selected date range through the current date. No correction was required.
+
+### Final DAX
+
+Running Total Sales =
+VAR CurrentDate = MAX('Dim_Date'[date])
+RETURN
+    CALCULATE(
+        [Total Sales],
+        FILTER(
+            ALLSELECTED('Dim_Date'),
+            'Dim_Date'[date] <= CurrentDate
+        )
+    )
