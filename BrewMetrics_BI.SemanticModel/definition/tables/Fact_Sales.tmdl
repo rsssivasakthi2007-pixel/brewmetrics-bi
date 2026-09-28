@@ -1,6 +1,23 @@
 table Fact_Sales
 	lineageTag: ba28558a-a744-4ab4-98ef-61634bf574e4
 
+	measure 'Total Sales' = SUM(Fact_Sales[sales_amount])
+		lineageTag: 11572a3e-fc19-48bd-b748-5a99101b1d44
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'MoM Sales Growth %' =
+			VAR CurrentSales = [Total Sales]
+			VAR PreviousMonthSales =
+				CALCULATE(
+					[Total Sales],
+					DATEADD('Dim_Date'[date], -1, MONTH)
+				)
+			RETURN
+				DIVIDE(CurrentSales - PreviousMonthSales, PreviousMonthSales)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 9de80914-d941-4d34-a4ca-73e246570d02
+
 	column sale_id
 		dataType: int64
 		formatString: 0
