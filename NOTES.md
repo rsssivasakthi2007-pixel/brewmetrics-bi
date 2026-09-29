@@ -39,3 +39,21 @@ RETURN
             'Dim_Date'[date] <= CurrentDate
         )
     )
+## Measure 3: Item Rank
+
+### Copilot suggestion
+Copilot suggested a RANKX measure to rank product items based on Total Sales, with the highest-selling item ranked 1.
+
+### My correction
+I reviewed the generated DAX and verified that it uses RANKX with Dim_Product[item] and Total Sales in descending order.
+
+### Final DAX
+
+Item Rank =
+RANKX(
+    ALL(Dim_Product[item]),
+    [Total Sales],
+    ,
+    DESC,
+    DENSE
+)
