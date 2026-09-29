@@ -57,3 +57,18 @@ RANKX(
     DESC,
     DENSE
 )
+## Measure 4: Average Transaction Value
+
+### Copilot suggestion
+Copilot suggested calculating the average transaction value by dividing Total Sales by the distinct number of sales transactions.
+
+### My correction
+I reviewed the generated DAX and verified that it uses the existing Total Sales measure and DISTINCTCOUNT of Fact_Sales[sale_id].
+
+### Final DAX
+
+Average Transaction Value =
+DIVIDE(
+    [Total Sales],
+    DISTINCTCOUNT(Fact_Sales[sale_id])
+)
