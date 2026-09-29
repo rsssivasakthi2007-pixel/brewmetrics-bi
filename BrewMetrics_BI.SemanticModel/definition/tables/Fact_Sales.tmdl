@@ -7,48 +7,54 @@ table Fact_Sales
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'MoM Sales Growth %' =
+			
 			VAR CurrentSales = [Total Sales]
 			VAR PreviousMonthSales =
-				CALCULATE(
-					[Total Sales],
-					DATEADD('Dim_Date'[date], -1, MONTH)
-				)
+			    CALCULATE(
+			        [Total Sales],
+			        DATEADD('Dim_Date'[date], -1, MONTH)
+			    )
 			RETURN
-				DIVIDE(CurrentSales - PreviousMonthSales, PreviousMonthSales)
+			    DIVIDE(CurrentSales - PreviousMonthSales, PreviousMonthSales)
 		formatString: 0.00%;-0.00%;0.00%
-		lineageTag: 9de80914-d941-4d34-a4ca-73e246570d02
+		lineageTag: 7867b470-32f8-4550-b98c-cb5f32301f5e
 
 	measure 'Running Total Sales' =
+			
 			VAR CurrentDate = MAX('Dim_Date'[date])
 			RETURN
-				CALCULATE(
-					[Total Sales],
-					FILTER(
-						ALLSELECTED('Dim_Date'),
-						'Dim_Date'[date] <= CurrentDate
-					)
-				)
-		formatString: #,##0.00
-		lineageTag: 12a506b4-79c4-40b4-8a73-383ac6e5f3c9
+			    CALCULATE(
+			        [Total Sales],
+			        FILTER(
+			            ALLSELECTED('Dim_Date'),
+			            'Dim_Date'[date] <= CurrentDate
+			        )
+			    )
+		lineageTag: 60c2b567-35fc-4e85-a3a2-607c9470800d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Item Rank' =
+			
 			RANKX(
-				ALLSELECTED('Dim_Product'[item]),
-				[Total Sales],
-				,
-				DESC,
-				DENSE
+			    ALL(Dim_Product[item]),
+			    [Total Sales],
+			    ,
+			    DESC,
+			    DENSE
 			)
 		formatString: 0
-		lineageTag: d69d0851-657c-44ee-9785-1e4df14fe8c0
+		lineageTag: ed9ba95a-ebb4-47c4-83b5-08d23ea21680
 
 	measure 'Average Transaction Value' =
+			
 			DIVIDE(
-				[Total Sales],
-				DISTINCTCOUNT(Fact_Sales[sale_id])
+			    [Total Sales],
+			    DISTINCTCOUNT(Fact_Sales[sale_id])
 			)
-	formatString: #,##0.00
-	lineageTag: 803616e7-b113-4d61-9cd1-19964292d345
+		lineageTag: 20a9f569-7359-4a08-b3c4-fc0d6f001dd5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column sale_id
 		dataType: int64
